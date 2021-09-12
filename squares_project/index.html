@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+
+    
+        <meta charset="UTF-8">
+        <title> </title>
+        <link rel="stylesheet" href="public/css/style.css">
+
+    </head>
+    <body>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        
+        
+        <div id="square"  ></div>
+    
+        <form id="myForm">
+            <label for="x">X</label>
+            <input type="number"name="x" id="x">
+            <label for="y">Y</label>
+            <input type="number"name="y" id="y">
+            <input type="color" id="clr" name="color">
+        </form>
+
+        <button onclick="Square();">Submit</button>
+        <button onclick="Reset()">Reset</button>
+
+        <div id="squares_space">Hello, if you submit, you should see the squares here!</div>
+        <div id="output_squares">Click on square to see if you win</div>
+        <script>
+
+
+            //input: a: number, b: number
+            //output: 1 output, product of a and b
+            //description: this function is used to multiply stuff
+            function multiply(a, b) {
+                return a*b;
+            }
+            //input: no input
+            //output: no output
+            //description: gets the value of x and y element and draw squares with that size
+            function Square() {
+
+                var x_element = document.getElementById("x"); 
+                var x = x_element.value;
+                
+                var y_element = document.getElementById("y");
+                var y = y_element.value;
+
+                var color = document.getElementById("clr").value;
+
+                var squares_space = document.getElementById("squares_space");
+
+                var data_to_write_inside_squares = "";
+
+                var counter = 0;
+                for (i = 0; i < x; i++) {
+                    for (j = 0; j < y; j++) {
+                        counter++;
+                        data_to_write_inside_squares += "<div class='square' style='background-color:" + color + "' onclick='that_square(" + counter + ")'></div>";;
+                    }
+                    data_to_write_inside_squares += "<br>";
+                }
+
+                squares_space.innerHTML = data_to_write_inside_squares;
+            }
+
+            //input: no input
+            //output: boolean, true if validated, false if error
+            //description: check if the value of x
+            function Validation() {
+                if (x.value== '') {
+                    alert("X field cannot be empty")
+                    return false;
+                }
+                if (y.value== '') {
+                    alert("Y field cannot be empty")
+                    return false;
+                }
+                if (x.value>50) {
+                    alert("Number cannot be greater than 50")
+                    return false;
+                }
+                if (y.value>50) {
+                    alert("Number cannot be greater than 50")
+                    return false;
+                }
+                if (x.value<1) {
+                    alert("Number cannot be smaller than 1")
+                    return false;
+                }
+                if (y.value<1) {
+                    alert("Number cannot be smaller than 1")
+                    return false;
+                }
+            }
+
+            function that_square(sqr_number) {
+                //console.log(sqr_number);
+
+                var x_element = document.getElementById("x"); 
+                var x = x_element.value;
+                
+                var y_element = document.getElementById("y");
+                var y = y_element.value;
+
+                 var random_number= Math.floor(Math.random() * (x*y - 1) + 1);
+
+                var output_squares = document.getElementById("output_squares");
+                if (sqr_number == random_number) {
+                    output_squares.innerHTML = "YOU WIN";
+                } else {
+                    output_squares.innerHTML = "TRY AGAIN";
+               }
+               params= "output_squares";
+               var request = new XMLHttpRequest();
+               request.open("POST","rand.php",true)
+               request.onreadystatechange = function(){
+                   if(this.readyState==4){
+                       if(this.status==200){
+                           if(this.responseText !=null){
+                               document.getElementById('output_squares').innerHTML= this.responseText
+                           }
+                           else alert ("Communication error: no data received")
+                       }
+                       else alert ("Communication error:"+ this.statusText)
+                   }
+                   
+               }
+
+
+            
+            }
+            
+        </script>
+        
+    </body>
+    
+</html>
